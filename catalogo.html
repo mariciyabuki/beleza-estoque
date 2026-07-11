@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,viewport-fit=cover"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="theme-color" content="#0a0614"/>
+<title>Catálogo — Beleza de Estoque N&A</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{background:#0a0614;color:#e2c9ff;font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh;padding-bottom:2rem}
+/* HEADER */
+.header{background:linear-gradient(135deg,#1a0a2e,#2d0a4e);padding:1.25rem 1rem 1rem;text-align:center;position:sticky;top:0;z-index:100;border-bottom:1px solid #3d2a5e}
+.header-logo{font-size:1.5rem;font-weight:900;background:linear-gradient(135deg,#d946ef,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:.15rem}
+.header-sub{font-size:.78rem;color:#a78bc0}
+/* SEARCH */
+.search-wrap{padding:.875rem 1rem .5rem;position:sticky;top:80px;z-index:99;background:#0a0614}
+.search-input{width:100%;background:#1a1028;border:1.5px solid #3d2a5e;border-radius:99px;color:#e2c9ff;padding:.7rem 1.1rem .7rem 2.8rem;font-size:.95rem;outline:none;transition:border-color .2s}
+.search-input:focus{border-color:#9333ea}
+.search-icon{position:absolute;left:1.8rem;top:50%;transform:translateY(-50%);font-size:1rem;pointer-events:none}
+.search-container{position:relative}
+/* CATEGORIAS */
+.cats-bar{display:flex;gap:.5rem;overflow-x:auto;padding:.5rem 1rem .75rem;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.cats-bar::-webkit-scrollbar{display:none}
+.cat-chip{flex-shrink:0;background:none;border:1.5px solid #3d2a5e;border-radius:99px;color:#a78bc0;padding:.4rem .9rem;font-size:.78rem;font-weight:600;cursor:pointer;transition:all .15s;white-space:nowrap}
+.cat-chip.active{background:linear-gradient(135deg,#9333ea,#d946ef);border-color:transparent;color:#fff}
+.cat-chip:active{opacity:.8}
+/* SECTION TITLES */
+.section-title{display:flex;align-items:center;gap:.5rem;padding:.75rem 1rem .4rem;font-size:.82rem;font-weight:700;color:#a78bc0;text-transform:uppercase;letter-spacing:.06em}
+.section-icon{font-size:1.1rem}
+/* GRID */
+.prod-grid{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;padding:0 1rem}
+/* CARD */
+.prod-card{background:#1a1028;border:1px solid #2e1f4a;border-radius:.875rem;overflow:hidden;transition:transform .15s,border-color .15s;cursor:pointer}
+.prod-card:active{transform:scale(.97);border-color:#9333ea}
+.prod-img{width:100%;aspect-ratio:1;object-fit:cover;display:block;background:#0f0a1e}
+.prod-img-placeholder{width:100%;aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:2.5rem;background:linear-gradient(135deg,#0f0a1e,#1a0a2e)}
+.prod-body{padding:.65rem .75rem .75rem}
+.prod-nome{font-size:.85rem;font-weight:700;color:#e2c9ff;line-height:1.3;margin-bottom:.2rem}
+.prod-marca{font-size:.68rem;color:#7c5fa0;margin-bottom:.35rem}
+.prod-preco{font-size:1.1rem;font-weight:900;color:#22c55e}
+.prod-preco-old{font-size:.75rem;color:#7c5fa0;text-decoration:line-through;margin-bottom:.1rem}
+.prod-promo{font-size:1rem;font-weight:900;color:#d946ef}
+.prod-badge{display:inline-block;background:#d946ef22;color:#d946ef;border:1px solid #d946ef44;border-radius:99px;padding:.1rem .45rem;font-size:.65rem;font-weight:700;margin-bottom:.3rem}
+/* SHARE BTN */
+.share-btn{position:fixed;bottom:1.25rem;right:1.25rem;background:linear-gradient(135deg,#22c55e,#16a34a);border:none;border-radius:99px;color:#fff;padding:.75rem 1.25rem;font-size:.88rem;font-weight:700;cursor:pointer;box-shadow:0 4px 20px rgba(34,197,94,.4);z-index:200;display:flex;align-items:center;gap:.4rem}
+.share-btn:active{opacity:.85;transform:scale(.97)}
+/* LIGHTBOX */
+.lightbox{position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:500;display:flex;align-items:center;justify-content:center;cursor:zoom-out}
+.lightbox img{max-width:95vw;max-height:90vh;border-radius:.75rem;object-fit:contain}
+/* EMPTY */
+.empty{text-align:center;padding:3rem 1rem;color:#7c5fa0}
+.empty-icon{font-size:3rem;margin-bottom:.75rem}
+/* FOOTER */
+.footer{text-align:center;padding:2rem 1rem 1rem;font-size:.72rem;color:#3d2a5e}
+/* MODAL */
+.overlay{position:fixed;inset:0;background:rgba(10,6,20,.75);z-index:300;display:flex;align-items:flex-end;justify-content:center}
+.modal{background:#1a1028;border:1px solid #3d2a5e;border-radius:1.1rem 1.1rem 0 0;width:100%;max-height:90vh;overflow-y:auto;padding:1.25rem 1rem 2rem;-webkit-overflow-scrolling:touch}
+.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;padding-bottom:.875rem;border-bottom:1px solid #2e1f4a}
+.modal-title{font-size:1.05rem;font-weight:800;color:#e2c9ff}
+.close-btn{background:none;border:none;color:#a78bc0;font-size:1.6rem;cursor:pointer;padding:.25rem .5rem;min-width:44px;min-height:44px;display:flex;align-items:center;justify-content:center}
+/* ANIMATIONS */
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.prod-card{animation:fadeIn .2s ease}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-logo">✦ Beleza de Estoque</div>
+  <div class="header-sub">N&A · Catálogo de Produtos</div>
+</div>
+
+<div class="search-wrap">
+  <div class="search-container">
+    <span class="search-icon">🔍</span>
+    <input class="search-input" id="busca" type="text" placeholder="Buscar produto, marca ou linha…" oninput="filtrar()" autocomplete="off"/>
+  </div>
+</div>
+
+<div class="cats-bar" id="cats-bar"></div>
+
+<div id="catalogo"></div>
+
+<button class="share-btn" onclick="compartilharCatalogo()">
+  📲 Compartilhar catálogo
+</button>
+
+<div class="footer">Beleza de Estoque N&A · Rio Claro, SP</div>
+
+<script>
+const LS='bsf_data';
+const ICONE_CATEGORIA={
+  'Sabonete em Barra':'🧼','Sabonete Líquido':'🧴','Hidratante Corporal':'💆',
+  'Desodorante':'💨','Cabelos':'💇','Óleo Corporal':'✨','Perfume Feminino':'🌸',
+  'Frescor/Águas':'💧','Body Splash':'🌊','Skincare':'🧖','Maquiagem':'💄',
+  'Mãos e Pés':'💅','Proteção Solar':'☀️','Bebês e Crianças':'👶',
+  'Perfume Masculino':'🏔️','Cuidados Masculinos':'🧔','Casa e Estilo':'🏠',
+  'CPV':'📦','Acessórios':'👜','Lingerie':'👗','Presentes':'🎁','Depilatório':'🪒'
+};
+const COR_POR_MARCA={
+  'Natura':'#00a651','Avon':'#e31837','Boticário':'#8b0051','Casa e Estilo':'#f5a623',
+  'QDB':'#0070c0','DeMillus':'#c8006a','Abelha Rainha':'#f4c430','CPV':'#5b2d8e',
+  'Eudora':'#d4006c','O.U.I.':'#818cf8'
+};
+
+function fmt(v){return new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(v||0);}
+function iconeCat(cat){return ICONE_CATEGORIA[cat]||'📦';}
+function corMarca(marca){return COR_POR_MARCA[marca]||'#818cf8';}
+
+let catAtiva='Todas';
+let DB={produtos:[]};
+
+// Load from localStorage (shared with main app on same domain)
+function carregar(){
+  try{
+    const d=JSON.parse(localStorage.getItem(LS)||'{}');
+    DB.produtos=d.produtos||[];
+  }catch(e){DB.produtos=[];}
+}
+
+function getProdutosVisiveis(){
+  const agora=new Date();
+  return DB.produtos.filter(p=>{
+    const temPreco=p.precoVenda>0||p.precoPromocional>0;
+    return temPreco;
+  });
+}
+
+function filtrar(){
+  renderCatalogo();
+}
+
+function setCat(cat){
+  catAtiva=cat;
+  // update chips
+  document.querySelectorAll('.cat-chip').forEach(c=>{
+    c.classList.toggle('active', c.dataset.cat===cat);
+  });
+  renderCatalogo();
+}
+
+function renderChips(){
+  const prods=getProdutosVisiveis();
+  const cats=['Todas',...new Set(prods.map(p=>p.categoria).filter(Boolean))].sort((a,b)=>a==='Todas'?-1:b==='Todas'?1:a.localeCompare(b,'pt'));
+  const bar=document.getElementById('cats-bar');
+  bar.innerHTML=cats.map(c=>`
+    <button class="cat-chip${c===catAtiva?' active':''}" data-cat="${c}" onclick="setCat('${c.replace(/'/g,"\\'")}')">${c==='Todas'?'🛍️ Todos':iconeCat(c)+' '+c}</button>
+  `).join('');
+}
+
+function renderCatalogo(){
+  const q=(document.getElementById('busca').value||'').toLowerCase().trim();
+  const agora=new Date();
+  let prods=getProdutosVisiveis();
+
+  // filter by search
+  if(q) prods=prods.filter(p=>
+    p.nome.toLowerCase().includes(q)||
+    (p.marca||'').toLowerCase().includes(q)||
+    (p.linha||'').toLowerCase().includes(q)||
+    (p.categoria||'').toLowerCase().includes(q)
+  );
+
+  // filter by category
+  if(catAtiva&&catAtiva!=='Todas') prods=prods.filter(p=>p.categoria===catAtiva);
+
+  const el=document.getElementById('catalogo');
+
+  if(!prods.length){
+    el.innerHTML=`<div class="empty"><div class="empty-icon">🔍</div><div style="font-weight:700;color:#a78bc0;margin-bottom:.35rem">Nenhum produto encontrado</div><div style="font-size:.82rem">Tente outra busca ou categoria</div></div>`;
+    return;
+  }
+
+  // Group by category (only if "Todas" selected and no search)
+  if(catAtiva==='Todas'&&!q){
+    const grupos={};
+    prods.forEach(p=>{
+      const cat=p.categoria||'Outros';
+      if(!grupos[cat]) grupos[cat]=[];
+      grupos[cat].push(p);
+    });
+
+    el.innerHTML=Object.entries(grupos).sort(([a],[b])=>a.localeCompare(b,'pt')).map(([cat,items])=>`
+      <div class="section-title">
+        <span class="section-icon">${iconeCat(cat)}</span>
+        <span>${cat}</span>
+        <span style="font-size:.72rem;color:#3d2a5e;margin-left:.25rem">(${items.length})</span>
+      </div>
+      <div class="prod-grid">${items.map(p=>cardHtml(p,agora)).join('')}</div>
+    `).join('');
+  } else {
+    el.innerHTML=`<div class="prod-grid" style="padding-top:.5rem">${prods.map(p=>cardHtml(p,agora)).join('')}</div>`;
+  }
+}
+
+function cardHtml(p,agora){
+  const promoAtiva=p.precoPromocional>0&&(!p.validadePromocao||new Date(p.validadePromocao+'T23:59:59')>agora);
+  const preco=promoAtiva?p.precoPromocional:p.precoVenda;
+  const marcaCor=corMarca(p.marca);
+
+  const imgHtml=p.foto
+    ?`<img class="prod-img" src="${p.foto}" loading="lazy" onclick="abrirLightbox('${p.foto.replace(/'/g,"\\'")}')"/>`
+    :`<div class="prod-img-placeholder">${iconeCat(p.categoria)}</div>`;
+
+  return`<div class="prod-card" onclick="abrirDetalheProduto(${p.id})">
+    ${imgHtml}
+    <div class="prod-body">
+      ${promoAtiva?'<div class="prod-badge">🔥 Promoção</div>':'' }
+      <div class="prod-nome">${p.nome}</div>
+      <div class="prod-marca" style="color:${marcaCor}">${p.marca}${p.linha?' · '+p.linha:''}</div>
+      ${promoAtiva
+        ?`<div class="prod-preco-old">${fmt(p.precoVenda)}</div><div class="prod-promo">${fmt(preco)}</div>`
+        :`<div class="prod-preco">${fmt(preco)}</div>`}
+    </div>
+  </div>`;
+}
+
+function abrirDetalheProduto(id){
+  const p=DB.produtos.find(x=>x.id===id);
+  if(!p) return;
+  const agora=new Date();
+  const promoAtiva=p.precoPromocional>0&&(!p.validadePromocao||new Date(p.validadePromocao+'T23:59:59')>agora);
+  const preco=promoAtiva?p.precoPromocional:p.precoVenda;
+  const marcaCor=corMarca(p.marca);
+
+  const ov=document.createElement('div');
+  ov.className='overlay';
+  ov.onclick=e=>{ if(e.target===ov) fecharModal(ov); };
+  ov.innerHTML=`<div class="modal">
+    <div class="modal-head">
+      <span class="modal-title">${p.nome}</span>
+      <button class="close-btn" onclick="fecharModal(document.querySelector('.overlay'))">×</button>
+    </div>
+    ${p.foto?`<img src="${p.foto}" style="width:100%;max-height:280px;object-fit:cover;border-radius:.75rem;margin-bottom:1rem" onclick="abrirLightbox('${p.foto.replace(/'/g,"\\'")}')"/>`:''}
+    <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.5rem">
+      <span style="background:${marcaCor}22;color:${marcaCor};border:1px solid ${marcaCor}44;border-radius:99px;padding:.2rem .65rem;font-size:.75rem;font-weight:700">${p.marca}</span>
+      ${p.linha?`<span style="background:#9333ea22;color:#d946ef;border:1px solid #9333ea44;border-radius:99px;padding:.2rem .65rem;font-size:.75rem">${p.linha}</span>`:''}
+      ${p.categoria?`<span style="color:#7c5fa0;font-size:.75rem">${iconeCat(p.categoria)} ${p.categoria}</span>`:''}
+    </div>
+    ${promoAtiva?`
+      <div style="font-size:.85rem;color:#7c5fa0;text-decoration:line-through">${fmt(p.precoVenda)}</div>
+      <div style="font-size:1.6rem;font-weight:900;color:#d946ef;margin-bottom:.25rem">${fmt(preco)} 🔥</div>
+      ${p.validadePromocao?`<div style="font-size:.75rem;color:#f59e0b;margin-bottom:.75rem">Promoção válida até ${new Date(p.validadePromocao+'T00:00:00').toLocaleDateString('pt-BR')}</div>`:''}
+    `:`
+      <div style="font-size:1.6rem;font-weight:900;color:#22c55e;margin-bottom:.75rem">${fmt(preco)}</div>
+    `}
+    <button onclick="pedirProduto('${p.nome.replace(/'/g,"\\'")}',${preco})" style="width:100%;background:linear-gradient(135deg,#22c55e,#16a34a);border:none;border-radius:.75rem;color:#fff;padding:.85rem;font-size:.95rem;font-weight:700;cursor:pointer;margin-bottom:.5rem">
+      📲 Quero esse produto!
+    </button>
+    <button onclick="fecharModal(document.querySelector('.overlay'))" style="width:100%;background:none;border:1px solid #3d2a5e;border-radius:.75rem;color:#a78bc0;padding:.75rem;font-size:.88rem;cursor:pointer">
+      Voltar ao catálogo
+    </button>
+  </div>`;
+  document.body.appendChild(ov);
+  document.body.style.overflow='hidden';
+
+  // swipe down to close
+  let startY=0;
+  const modal=ov.querySelector('.modal');
+  modal.addEventListener('touchstart',e=>{startY=e.touches[0].clientY;},{passive:true});
+  modal.addEventListener('touchend',e=>{
+    if(e.changedTouches[0].clientY-startY>80) fecharModal(ov);
+  },{passive:true});
+}
+
+function fecharModal(ov){
+  if(ov&&ov.parentNode) ov.parentNode.removeChild(ov);
+  document.body.style.overflow='';
+}
+
+function pedirProduto(nome,preco){
+  const texto=`Olá! Vi no catálogo da *Beleza de Estoque* e gostaria de encomendar:\n\n🌸 *${nome}*\n💰 ${fmt(preco)}\n\nPode me atender? 😊`;
+  fecharModal(document.querySelector('.overlay'));
+  if(navigator.share){
+    navigator.share({text:texto}).catch(()=>window.open('https://wa.me/?text='+encodeURIComponent(texto),'_blank'));
+  } else {
+    window.open('https://wa.me/?text='+encodeURIComponent(texto),'_blank');
+  }
+}
+
+function abrirLightbox(src){
+  const lb=document.createElement('div');
+  lb.className='lightbox';
+  lb.innerHTML=`<img src="${src}" alt="Foto do produto"/>`;
+  lb.onclick=()=>document.body.removeChild(lb);
+  document.body.appendChild(lb);
+}
+
+function compartilharCatalogo(){
+  const url=window.location.href;
+  const texto=`🌸 *Catálogo Beleza de Estoque — N&A*\n\nVeja nossos produtos com preços!\n👇 ${url}`;
+  if(navigator.share){
+    navigator.share({title:'Catálogo N&A',text:texto,url}).catch(()=>{
+      window.open('https://wa.me/?text='+encodeURIComponent(texto),'_blank');
+    });
+  } else {
+    window.open('https://wa.me/?text='+encodeURIComponent(texto),'_blank');
+  }
+}
+
+// Init
+carregar();
+renderChips();
+renderCatalogo();
+
+// Listen for storage changes (if app updates products)
+window.addEventListener('storage',e=>{
+  if(e.key===LS){ carregar(); renderChips(); renderCatalogo(); }
+});
+</script>
+</body>
+</html>
